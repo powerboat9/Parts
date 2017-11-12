@@ -1,0 +1,20 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": {
+      "model": "cube_all",
+      "textures": {
+        "up": "partsmod:blocks/assembler_top",
+        "down": "partsmod:blocks/assembler",
+        "north": "partsmod:blocks/assembler",
+        "south": "partsmod:blocks/assembler",
+        "east": "partsmod:blocks/assembler",
+        "west": "partsmod:blocks/assembler"
+      }
+    },
+    "inventory": {
+      "model": "cube_all",
+      "transform": "forge:default-block"
+    }
+  }
+}

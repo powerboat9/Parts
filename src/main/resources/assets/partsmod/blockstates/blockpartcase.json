@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": {
+      "model": "partsmod:blockpartcase",
+      "textures": {
+        "frame": "minecraft:blocks/iron_block"
+      }
+    },
+    "inventory": {
+      "model": "partsmod:blockpartcase",
+      "transform": "forge:default-block"
+    }
+  }
+}

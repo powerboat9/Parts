@@ -1,0 +1,17 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": {
+      "model": "partsmod:blockresearcher",
+      "textures": {
+        "side": "minecraft:blocks/iron_block",
+        "down": "minecraft:blocks/iron_block",
+        "up": "minecraft:blocks/gold_block"
+      }
+    },
+    "inventory": {
+      "model": "partsmod:blockresearcher",
+      "transform": "forge:default-block"
+    }
+  }
+}
