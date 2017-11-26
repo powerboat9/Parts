@@ -1,8 +1,7 @@
 package com.powerboat9.partsmod.network;
 
 import com.powerboat9.partsmod.container.ContainerAssembler;
-import com.powerboat9.partsmod.gui.GuiAssembler;
-import com.powerboat9.partsmod.gui.GuiResearcher;
+import com.powerboat9.partsmod.client.gui.GuiAssembler;
 import com.powerboat9.partsmod.tiles.TileAssembler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -23,7 +22,7 @@ public class PartsGuiHandler implements IGuiHandler {
             case GUI_ASSEMBLER:
                 TileEntity t = world.getTileEntity(new BlockPos(x, y, z));
                 if (t instanceof TileAssembler) {
-                    return new ContainerAssembler((TileAssembler) t);
+                    return new ContainerAssembler((TileAssembler) t, player.inventory);
                 }
                 break;
         }
@@ -36,10 +35,7 @@ public class PartsGuiHandler implements IGuiHandler {
         switch (ID) {
             case GUI_ASSEMBLER:
                 TileEntity t = world.getTileEntity(new BlockPos(x, y, z));
-                if (t instanceof TileAssembler) {
-                    return new GuiAssembler(new ContainerAssembler((TileAssembler) t));
-                }
-                break;
+                return new GuiAssembler(new ContainerAssembler((TileAssembler) t, player.inventory));
         }
         return null;
     }

@@ -1,40 +1,21 @@
 package com.powerboat9.partsmod.client.render;
 
 import com.powerboat9.partsmod.PartsModMain;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.model.ModelChest;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import com.powerboat9.partsmod.parts.IPartHolder;
+import com.powerboat9.partsmod.parts.Part;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemOverrideList;
-import net.minecraft.client.renderer.block.model.ModelManager;
-import net.minecraft.client.renderer.color.BlockColors;
-import net.minecraft.client.renderer.entity.RenderFallingBlock;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderItemFrame;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3i;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.client.model.animation.AnimationTESR;
-import net.minecraftforge.common.model.IModelState;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-
-import javax.annotation.Nullable;
-import java.util.List;
+import net.minecraft.util.math.Vec3d;
 
 public class MainRender {
-    public static BlockRendererDispatcher blockRendererDispatcher = null;
-    public static BlockModelRenderer blockModelRenderer = null;
-    public static ModelManager blockModelManager = null;
-
     public static void drawRectPrism(int x, int y, int z, int dx, int dy, int dz, ResourceLocation up, ResourceLocation down, ResourceLocation north, ResourceLocation south, ResourceLocation east, ResourceLocation west) {
         GlStateManager.pushAttrib();
         GlStateManager.pushMatrix();
@@ -114,14 +95,32 @@ public class MainRender {
         GlStateManager.popAttrib();
     }
 
-    @Mod.EventHandler
-    public static void cacheRenderVars(FMLPostInitializationEvent event) {
-        blockRendererDispatcher = PartsModMain.mc.getBlockRendererDispatcher();
-        blockModelRenderer = blockRendererDispatcher.getBlockModelRenderer();
-        blockModelManager = blockRendererDispatcher.getBlockModelShapes().getModelManager();
-    }
-
     public static void renderModel(IBakedModel model) {
         PartsModMain.mc.getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightnessColor(model, 1, 1, 1, 1);
+    }
+
+    public static void renderPart(double x, double y, double z, float rotX, float rotY, float rotZ, Part part) {
+        if (!part.isSimple() && !part.isDynamic()) return;
+        GlStateManager.pushAttrib();
+        GlStateManager.pushMatrix();
+        GlStateManager.rotate(rotX, 1, 0, 0);
+        GlStateManager.rotate(rotY, 0, 1, 0);
+        GlStateManager.rotate(rotZ, 0, 0, 1);
+        GlStateManager.translate(x, y, z);
+        if (part.isSimple()) {
+            MainRender.renderModel(PartsModMain.mc.getBlockRendererDispatcher().getBlockModelShapes().getModelManager().getModel(new ModelResourceLocation(part.getRegistryName(), part.modelVariant(null))));
+        }
+        if (part.isDynamic()) {
+            part.render();
+        }
+        GlStateManager.popMatrix();
+        GlStateManager.popAttrib();
+    }
+
+    public static void renderPart(IPartHolder holder, Part part) {
+        if (!part.isSimple() && !part.isDynamic()) return;
+        int[] partPos = part.getCoords();
+        Vec3d ang = holder.getAngle().add(part.getModelRot());
+        renderPart(partPos[0], partPos[1], partPos[2], (float) ang.x, (float) ang.y, (float) ang.z, part);
     }
 }

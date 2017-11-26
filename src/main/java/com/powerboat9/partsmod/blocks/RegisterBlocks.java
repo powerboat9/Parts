@@ -1,5 +1,6 @@
-package com.powerboat9.partsmod;
+package com.powerboat9.partsmod.blocks;
 
+import com.powerboat9.partsmod.PartsModMain;
 import com.powerboat9.partsmod.blocks.BlockAssembler;
 import com.powerboat9.partsmod.blocks.BlockBase;
 import com.powerboat9.partsmod.blocks.BlockPartCase;
@@ -23,10 +24,10 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 
 @Mod.EventBusSubscriber(modid = PartsModMain.modid)
 public class RegisterBlocks {
-    private static TileEntity[] tileEntities = {
-            new TilePartCase(),
-            new TileResearcher(),
-            new TileAssembler()
+    private static Class<? extends TileEntity>[] tileEntities = new Class[]{
+            TilePartCase.class,
+            TileResearcher.class,
+            TileAssembler.class
     };
 
     private static BlockBase[] blocks = {
@@ -46,8 +47,8 @@ public class RegisterBlocks {
     @SubscribeEvent
     public static void registerBlocks(final RegistryEvent.Register<Block> event) {
         event.getRegistry().registerAll(blocks);
-        for (TileEntity tile : tileEntities) {
-            GameRegistry.registerTileEntity(tile.getClass(), tile.getClass().getSimpleName());
+        for (Class c : tileEntities) {
+            GameRegistry.registerTileEntity(c, c.getSimpleName());
         }
     }
 

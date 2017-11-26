@@ -1,14 +1,23 @@
 package com.powerboat9.partsmod.parts;
 
 import jline.internal.Nullable;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import java.lang.reflect.InvocationTargetException;
 
 public abstract class Part extends IForgeRegistryEntry.Impl<Part> {
-    public abstract int[] getCoords();
+    public IPartHolder holder;
+    public EnumFacing face = EnumFacing.NORTH;
+    int x = 0, y = 0, z = 0;
+
+    public Part(IPartHolder partHolder) {
+        holder = partHolder;
+    }
 
     public Part createNew(IPartHolder partHolder) {
         try {
@@ -25,7 +34,26 @@ public abstract class Part extends IForgeRegistryEntry.Impl<Part> {
         return null;
     }
 
+    public int[] getCoords() {
+        return new int[]{x, y, z};
+    }
+
+    public EnumFacing getRot() {
+        return face;
+    }
+
     public void render() {
+    }
+
+    public Vec3d getModelRot() {
+        switch (face) {
+            case DOWN: return new Vec3d(90, 0, 0);
+            case UP: return new Vec3d(-90, 0, 0);
+            case SOUTH: return new Vec3d(0, 180, 0);
+            case WEST: return new Vec3d(0, -90, 0);
+            case EAST: return new Vec3d(0, 90, 0);
+            default: return Vec3d.ZERO;
+        }
     }
 
     // Whether to call this.render() during render phase, can be used with this.isSimple()
@@ -38,18 +66,27 @@ public abstract class Part extends IForgeRegistryEntry.Impl<Part> {
         return true;
     }
 
-    @Nullable
-    public abstract String modelVarient();
+    public String modelVariant(@Nullable ItemStack itemStack) {
+        return "normal";
+    }
 
-    public abstract void loadPart(NBTTagCompound nbt);
+    public void loadPart(NBTTagCompound nbt) {
+        int[] loc = nbt.getIntArray("pos");
+        x = loc[0];
+        y = loc[1];
+        z = loc[2];
+        face = EnumFacing.VALUES[nbt.getInteger("direction")];
+    }
 
-    public abstract NBTTagCompound savePart(NBTTagCompound nbt);
+    public NBTTagCompound savePart(NBTTagCompound nbt) {
+        nbt.setIntArray("pos", new int[]{x, y, z});
+        nbt.setInteger("direction", face.getIndex());
+        return nbt;
+    }
 
-    public abstract void update();
+    public abstract void update(World worldIn);
 
     public abstract boolean takesUp(int x, int y, int z);
-
-    public abstract EnumFacing orientation();
 
     public abstract String[] dependants();
 }

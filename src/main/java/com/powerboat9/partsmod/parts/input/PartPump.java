@@ -1,12 +1,16 @@
 package com.powerboat9.partsmod.parts.input;
 
+import com.powerboat9.partsmod.PartsModMain;
 import com.powerboat9.partsmod.parts.IPartHolder;
-import com.powerboat9.partsmod.parts.PartSidedInOut;
+import com.powerboat9.partsmod.parts.IPartPorts;
+import com.powerboat9.partsmod.parts.Part;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
 
-public class PartPump extends PartSidedInOut {
+public class PartPump extends Part implements IPartPorts {
     public PartPump(IPartHolder partHolder) {
         super(partHolder);
+        setRegistryName(PartsModMain.modid, "pump");
     }
 
     @Override
@@ -30,23 +34,12 @@ public class PartPump extends PartSidedInOut {
     }
 
     @Override
-    public int[] getCoords() {
-        return null;
-    }
-
-    @Override
-    public void update() {
-
+    public void update(World worldIn) {
     }
 
     @Override
     public boolean takesUp(int x, int y, int z) {
         return false;
-    }
-
-    @Override
-    public EnumFacing orientation() {
-        return null;
     }
 
     @Override

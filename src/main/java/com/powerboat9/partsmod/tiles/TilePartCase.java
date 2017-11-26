@@ -1,6 +1,5 @@
 package com.powerboat9.partsmod.tiles;
 
-import com.powerboat9.partsmod.PartsModMain;
 import com.powerboat9.partsmod.parts.Part;
 import com.powerboat9.partsmod.parts.IPartHolder;
 import com.powerboat9.partsmod.parts.PartRegistry;
@@ -8,6 +7,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class TilePartCase extends TileEntity implements ITickable, IPartHolder {
     @Override
     public void update() {
         for (Part part : parts) {
-            part.update();
+            part.update(this.world);
         }
     }
 
@@ -58,5 +59,16 @@ public class TilePartCase extends TileEntity implements ITickable, IPartHolder {
             }
         }
         return null;
+    }
+
+
+    @Override
+    public Vec3d getAngle() {
+        return new Vec3d(0, 0, 0);
+    }
+
+    @Override
+    public Vec3d getHolderPos() {
+        return new Vec3d(this.getPos());
     }
 }

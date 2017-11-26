@@ -1,4 +1,4 @@
-package com.powerboat9.partsmod.gui;
+package com.powerboat9.partsmod.client.gui;
 
 import com.powerboat9.partsmod.PartsModMain;
 import net.minecraft.client.Minecraft;
